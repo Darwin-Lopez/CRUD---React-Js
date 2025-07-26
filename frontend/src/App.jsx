@@ -30,6 +30,9 @@ export default function App() {
       getRegisters();
       clearFields();
       toast.success("User created successfully");
+    }).catch((error) => {
+      console.error(error);
+      toast.error("Error creating user");
     })
   }
 
@@ -90,9 +93,13 @@ export default function App() {
   }, [])
 
   const getRegisters = async () => {
-    const data = await fetch("http://localhost:3000/list");
-    const response = await data.json();
-    setUsers(response);
+    try{
+      const data = await fetch("http://localhost:3000/list");
+      const response = await data.json();
+      setUsers(response);
+    }catch(e){
+      console.error(e);
+    }
   }
 
   const dates = users.map((e) => {
@@ -191,7 +198,8 @@ export default function App() {
               </tr>
             </thead>
             <tbody>
-              {users.length > 0
+              {
+              users.length > 0
                 ? dates
                 : <tr className="border-b">
                     <th scope="row" colSpan={6} className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
